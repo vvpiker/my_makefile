@@ -28,6 +28,23 @@ CPPCHECK_FLAGS = --std=c99 \
                  # --inconclusive
 
 # ==============================================================================
+# Санитайзеры (ASan + UBSan)
+# ==============================================================================
+# По умолчанию отключены. Включаются через SANITIZE=1.
+SANITIZE ?= 0
+
+ifeq ($(SANITIZE),1)
+  CFLAGS   += -fsanitize=address,undefined
+  CFLAGS   += -fno-omit-frame-pointer
+  CFLAGS   += -fno-sanitize-recover=all
+  LDFLAGS  += -fsanitize=address,undefined
+endif
+
+# Флаги времени выполнения для ASan/UBSan
+SANITIZER_ENV = ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 \
+                UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=1
+
+# ==============================================================================
 # Файлы
 # ==============================================================================
 # Автоматический поиск всех .c файлов в src/

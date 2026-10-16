@@ -24,6 +24,13 @@ make cppcheck
 # Только сборка (без проверок)
 make build
 
+# Сборка с ASan + UBSan (обязательно с чистого листа!)
+make clean && make SANITIZE=1 build
+
+# Запуск с флагами времени выполнения
+ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 \
+UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=1 ./program
+
 # Очистка
 make clean
 
