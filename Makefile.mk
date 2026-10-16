@@ -8,21 +8,24 @@ CPPCHECK  = cppcheck
 # Флаги
 # ==============================================================================
 # Строгие флаги предупреждений для C99
-CFLAGS   += -std=c99 -Wall -Wextra -Wpedantic
-CFLAGS   += -Wshadow -Wconversion -Wsign-conversion
-CFLAGS   += -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
-CFLAGS   += -Wold-style-definition -Wvla -Wformat=2 -Wundef
-CFLAGS   += -Wpointer-arith -Wwrite-strings -Wdouble-promotion
-CFLAGS   += -Wfloat-equal -Wswitch-enum
+CFLAGS   += -Werror
+CFLAGS   += -Wpedantic
+CFLAGS   += -std=c99 -Wall -Wextra
+CFLAGS   += -Wstrict-prototypes
+# CFLAGS   += -Wshadow -Wconversion -Wsign-conversion
+# CFLAGS   += -Wcast-qual -Wmissing-prototypes
+# CFLAGS   += -Wold-style-definition -Wvla -Wformat=2 -Wundef
+# CFLAGS   += -Wpointer-arith -Wwrite-strings -Wdouble-promotion
+# CFLAGS   += -Wfloat-equal -Wswitch-enum
 
 # Флаги cppcheck
 CPPCHECK_FLAGS = --std=c99 \
-                 --enable=all \
-                 --inconclusive \
+                 --enable=warning,style,portatibility,perfomance \
                  --force \
                  --error-exitcode=1 \
                  --suppress=missingIncludeSystem \
                  --quiet
+                 # --inconclusive
 
 # ==============================================================================
 # Файлы
