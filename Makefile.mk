@@ -1,0 +1,77 @@
+# ==============================================================================
+# Компиляторы и инструменты
+# ==============================================================================
+CC        = clang
+CPPCHECK  = cppcheck
+
+# ==============================================================================
+# Флаги
+# ==============================================================================
+# Строгие флаги предупреждений для C99
+CFLAGS   += -std=c99 -Wall -Wextra -Wpedantic
+CFLAGS   += -Wshadow -Wconversion -Wsign-conversion
+CFLAGS   += -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+CFLAGS   += -Wold-style-definition -Wvla -Wformat=2 -Wundef
+CFLAGS   += -Wpointer-arith -Wwrite-strings -Wdouble-promotion
+CFLAGS   += -Wfloat-equal -Wswitch-enum
+
+# Флаги cppcheck
+CPPCHECK_FLAGS = --std=c99 \
+                 --enable=all \
+                 --inconclusive \
+                 --force \
+                 --error-exitcode=1 \
+                 --suppress=missingIncludeSystem \
+                 --quiet
+
+# ==============================================================================
+# Файлы
+# ==============================================================================
+# Автоматический поиск всех .c файлов в src/
+SRCS      := $(wildcard src/*.c)
+OBJS      := $(SRCS:.c=.o)
+TARGET    := program
+
+# ==============================================================================
+# Основные цели
+# ==============================================================================
+
+# Цель по умолчанию: полная проверка и сборка
+all: check build
+
+# Только сборка
+build: $(TARGET)
+
+# Финальная сборка
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
+
+# Компиляция объектных файлов
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+# ==============================================================================
+# Статические проверки
+# ==============================================================================
+
+# Полная проверка: clang (быстро) + cppcheck (глубоко)
+check: clang-check cppcheck
+
+# Быстрая проверка синтаксиса и предупреждений clang
+clang-check:
+	@echo "==> Running clang syntax check..."
+	$(CC) $(CFLAGS) -fsyntax-only $(SRCS)
+
+# Глубокий статический анализ cppcheck
+cppcheck:
+	@echo "==> Running cppcheck..."
+	$(CPPCHECK) $(CPPCHECK_FLAGS) $(SRCS)
+
+# ==============================================================================
+# Очистка
+# ==============================================================================
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all build check clang-check cppcheck clean
