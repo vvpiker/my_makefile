@@ -20,7 +20,7 @@ CFLAGS   += -Wstrict-prototypes
 
 # Флаги cppcheck
 CPPCHECK_FLAGS = --std=c99 \
-                 --enable=warning,style,portatibility,perfomance \
+                 --enable=warning,style,portability,perfomance \
                  --force \
                  --error-exitcode=1 \
                  --suppress=missingIncludeSystem \
@@ -64,7 +64,7 @@ build: $(TARGET)
 
 # Финальная сборка
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 # Компиляция объектных файлов
 %.o: %.c
@@ -88,10 +88,17 @@ cppcheck:
 	$(CPPCHECK) $(CPPCHECK_FLAGS) $(SRCS)
 
 # ==============================================================================
+# CI
+# ==============================================================================
+
+ci:
+	@bash scripts/ci.sh
+
+# ==============================================================================
 # Очистка
 # ==============================================================================
 
 clean:
 	rm -f $(OBJS) $(TARGET)
 
-.PHONY: all build check clang-check cppcheck clean
+.PHONY: all build check clang-check cppcheck ci clean
