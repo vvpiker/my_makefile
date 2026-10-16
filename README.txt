@@ -14,18 +14,29 @@ project/
 │   └── utils.h
 └── Makefile
 
+* scripts/build.sh        — local build without sanitizers (dev only)
+* scripts/static-check.sh — clang syntax check + cppcheck static analysis
+* scripts/sanitize.sh     — clean rebuild with ASan+UBSan, then run
+* scripts/ci.sh           — CI entry: static checks followed by sanitized run
 
 Использование
+
 # Полная проверка и сборка (по умолчанию)
 make
+или
+bash scripts/static-check.sh
+bash scripts/build.sh
 
 # Только быстрая проверка clang
 make clang-check
-или
-bash scripts/static-check.sh
 
 # Только глубокий анализ cppcheck
 make cppcheck
+
+# Полная прокерка
+make check
+или
+bash scripts/static-check.sh
 
 # Только сборка (без проверок)
 make build
@@ -50,18 +61,9 @@ make ci
 bash scripts/ci.sh
 
 
-
 # Очистка
 make clean
 
-# Локально — через Makefile
-make ci
-
-# Локально — напрямую
-bash scripts/ci.sh
-
-# Запуск санитайзеров с аргументами программы
-bash scripts/sanitize.sh input.txt --verbose
 
 Как это работает
     make all — это главная цель. Она сначала запускает check (обе проверки), 
