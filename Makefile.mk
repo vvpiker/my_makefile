@@ -1,7 +1,7 @@
 # ==============================================================================
 # Компиляторы и инструменты
 # ==============================================================================
-CC        = clang
+CC        = gcc
 CPPCHECK  = cppcheck
 
 # ==============================================================================
@@ -20,7 +20,7 @@ CFLAGS   += -Wstrict-prototypes
 
 # Флаги cppcheck
 CPPCHECK_FLAGS = --std=c99 \
-                 --enable=warning,style,portability,perfomance \
+                 --enable=warning,style,portability,performance \
                  --force \
                  --error-exitcode=1 \
                  --suppress=missingIncludeSystem \
@@ -48,7 +48,7 @@ SANITIZER_ENV = ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 \
 # Файлы
 # ==============================================================================
 # Автоматический поиск всех .c файлов в src/
-SRCS      := $(wildcard src/*.c)
+SRCS      := $(wildcard ./*.c)
 OBJS      := $(SRCS:.c=.o)
 TARGET    := program
 
